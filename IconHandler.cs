@@ -28,9 +28,11 @@ namespace TargetCheck
         public void Display()
         {
             icon.MouseClick += new MouseEventHandler(icon_MouseClick);
-            icon.Icon = System.Drawing.SystemIcons.Information;
+            icon.Icon = TargetCheck.Properties.Resources.iconFalse;
             icon.Text = "Target Ready";
             icon.Visible = true;
+
+            icon.ContextMenuStrip = new CxtMenu().Create();
 
             ctDelegate = new CheckTargetDelegate(this.CheckTarget);
             ctDelegate.BeginInvoke(0, false, null, null);
@@ -45,12 +47,23 @@ namespace TargetCheck
             Application.Exit();
         }
 
-        void icon_MouseClick(object sender, MouseEventArgs args)
+        void icon_MouseClick(object sender, MouseEventArgs mouseEvent)
         {
             // TODO: On right-click, show settings menu
             // Change target IP address
             // Change loop period
-            Dispose();
+            if (mouseEvent.Button == MouseButtons.Right)
+            {
+                // stuff
+            }
+            switch (mouseEvent.Button)
+            {
+                case MouseButtons.Right:
+                    break;
+                case MouseButtons.Left:
+                    Dispose();
+                    break;
+            }
         }
 
         private void CheckTarget(int param1, bool param2)
