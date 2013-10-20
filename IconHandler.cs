@@ -11,17 +11,19 @@ namespace TargetCheck
 {
     class IconHandler : IDisposable
     {
+        // Icon variables
         NotifyIcon icon;
         private delegate void CheckTargetDelegate(int param1, bool param2);
         private CheckTargetDelegate ctDelegate;
         Boolean threadChecking = true;
 
+        // Ping variables
         static Ping ping = new Ping();
         public static IPAddress address = IPAddress.Parse("192.168.1.101");
-        PingOptions options = new PingOptions();
         static PingReply reply;
 
-        public static int loopPeriod = 500;
+        // Ping thread repetition rate
+        public static int loopPeriod = 500; // ms
 
         ContextMenuStrip menu;
 
@@ -32,13 +34,16 @@ namespace TargetCheck
 
         public void Display()
         {
+            // Initialize Icon
             icon.Icon = TargetCheck.Properties.Resources.iconFalse;
             icon.Text = "Target Ready";
             icon.Visible = true;
 
+            // Context Menu
             menu = new CxtMenu().Create();
             icon.ContextMenuStrip = menu;
 
+            // Create thread to continuously check ping
             ctDelegate = new CheckTargetDelegate(this.CheckTarget);
             ctDelegate.BeginInvoke(0, false, null, null);
         }

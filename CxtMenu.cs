@@ -18,12 +18,10 @@ namespace TargetCheck
 
         public ContextMenuStrip Create()
         {
-            BuildMenu();
-
-            return menu;
+            return BuildMenu();
         }
 
-        void BuildMenu()
+        private ContextMenuStrip BuildMenu()
         {
             menu.Items.Clear();
 
@@ -55,6 +53,8 @@ namespace TargetCheck
             item.Text = "Close";
             item.Click += new EventHandler(Exit);
             menu.Items.Add(item);
+
+            return menu;
         }
 
         void setAddress(object sender, EventArgs e)
