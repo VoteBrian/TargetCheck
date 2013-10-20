@@ -21,6 +21,8 @@ namespace TargetCheck
         PingOptions options = new PingOptions();
         static PingReply reply;
 
+        public static int loopPeriod = 500;
+
         ContextMenuStrip menu;
 
         public IconHandler()
@@ -30,7 +32,6 @@ namespace TargetCheck
 
         public void Display()
         {
-            icon.MouseClick += new MouseEventHandler(icon_MouseClick);
             icon.Icon = TargetCheck.Properties.Resources.iconFalse;
             icon.Text = "Target Ready";
             icon.Visible = true;
@@ -51,18 +52,6 @@ namespace TargetCheck
             Application.Exit();
         }
 
-        void icon_MouseClick(object sender, MouseEventArgs mouseEvent)
-        {
-            // Right-click handled in CxtMenu
-            // Left-click closes program
-            switch (mouseEvent.Button)
-            {
-                case MouseButtons.Left:
-                    Dispose();
-                    break;
-            }
-        }
-
         private void CheckTarget(int param1, bool param2)
         {
             while (threadChecking)
@@ -79,7 +68,7 @@ namespace TargetCheck
                 }
 
                 // wait 
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(loopPeriod);
             }
         }
     }
