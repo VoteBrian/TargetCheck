@@ -15,15 +15,16 @@ namespace TargetCheck
         NotifyIcon icon;
         private delegate void CheckTargetDelegate(int param1, bool param2);
         private CheckTargetDelegate ctDelegate;
-        Boolean threadChecking = true;
+        private Boolean threadChecking = true;
 
         // Ping variables
-        static Ping ping = new Ping();
-        public static IPAddress address = IPAddress.Parse("192.168.1.101");
-        static PingReply reply;
+        private static Ping ping = new Ping();
+        public  static IPAddress address = IPAddress.Parse("192.168.1.101");
+        private static PingReply reply;
+        public  static int timeout = 500; //ms
 
         // Ping thread repetition rate
-        public static int loopPeriod = 500; // ms
+        public  static int loopPeriod = 1000; // ms
 
         ContextMenuStrip menu;
 
@@ -48,9 +49,13 @@ namespace TargetCheck
             ctDelegate.BeginInvoke(0, false, null, null);
         }
 
+        // Unused?
         public void Dispose()
         {
+            // Kill looping thread
             threadChecking = false;
+
+            // Remove Icon
             icon.Visible = false;
             icon.Dispose();
 
@@ -62,7 +67,7 @@ namespace TargetCheck
             while (threadChecking)
             {
                 // ping IP
-                reply = ping.Send(address);
+                reply = ping.Send(address, timeout);
                 if (reply.Status == IPStatus.Success)
                 {
                     icon.Icon = TargetCheck.Properties.Resources.iconTrue;

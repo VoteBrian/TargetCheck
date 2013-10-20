@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using System.Windows.Forms;
 using System.Net;
 
@@ -25,30 +25,35 @@ namespace TargetCheck
         {
             menu.Items.Clear();
 
+            // Settings Menu
             item = new ToolStripMenuItem();
-            item.Text = "Change IP Address";
-            item.Click += new EventHandler(setAddress);
+            item.Text = "Settings:";
+            item.ForeColor = SystemColors.Highlight;
+            item.Click += new EventHandler(openSettings);
             menu.Items.Add(item);
 
+            // Current Address
             label = new ToolStripLabel();
-            label.Text = " " + IconHandler.address.ToString();
+            label.Text = "[" + IconHandler.address.ToString() + "]";
+            label.ForeColor = SystemColors.ControlDark;
+            menu.Items.Add(label);
+
+            // Current Period
+            label = new ToolStripLabel();
+            label.Text = "Period: " + IconHandler.loopPeriod.ToString() + " ms";
+            label.ForeColor = SystemColors.ControlDark;
+            menu.Items.Add(label);
+
+            // Current Timeout
+            label = new ToolStripLabel();
+            label.Text = "Timeout: " + IconHandler.timeout.ToString() + " ms";
+            label.ForeColor = SystemColors.ControlDark;
             menu.Items.Add(label);
 
             separator = new ToolStripSeparator();
             menu.Items.Add(separator);
 
-            item = new ToolStripMenuItem();
-            item.Text = "Set Repetition Period";
-            // item.Click += new EventHandler();
-            menu.Items.Add(item);
-
-            label = new ToolStripLabel();
-            label.Text = " " + IconHandler.loopPeriod.ToString() + " ms";
-            menu.Items.Add(label);
-
-            separator = new ToolStripSeparator();
-            menu.Items.Add(separator);
-
+            // Close
             item = new ToolStripMenuItem();
             item.Text = "Close";
             item.Click += new EventHandler(Exit);
@@ -57,9 +62,13 @@ namespace TargetCheck
             return menu;
         }
 
-        void setAddress(object sender, EventArgs e)
+        void openSettings(Object sender, EventArgs e)
         {
-            IconHandler.address = IPAddress.Parse("208.113.228.159");
+            // Open Settings Form and wait for close
+            SettingsForm settings = new SettingsForm();
+            settings.ShowDialog();
+
+            // Update context menu with new values
             BuildMenu();
         }
 
