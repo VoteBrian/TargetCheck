@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Windows.Forms;
+using System.Net;
 
 namespace TargetCheck
 {
@@ -18,7 +19,7 @@ namespace TargetCheck
 
             item = new ToolStripMenuItem();
             item.Text = "Set IP Address";
-            // item.Click += new EventHandler();
+            item.Click += new EventHandler(setAddress);
             menu.Items.Add(item);
 
             item = new ToolStripMenuItem();
@@ -30,11 +31,16 @@ namespace TargetCheck
             menu.Items.Add(separator);
 
             item = new ToolStripMenuItem();
-            item.Text = "Exit";
+            item.Text = "Close";
             item.Click += new EventHandler(Exit);
             menu.Items.Add(item);
 
             return menu;
+        }
+
+        void setAddress(object sender, EventArgs e)
+        {
+            IconHandler.address = IPAddress.Parse("208.113.228.159");
         }
 
         void Exit(object sender, EventArgs e)

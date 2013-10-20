@@ -17,8 +17,11 @@ namespace TargetCheck
         Boolean threadChecking = true;
 
         static Ping ping = new Ping();
-        static IPAddress address = IPAddress.Parse("10.0.0.0");
+        public static IPAddress address = IPAddress.Parse("192.168.1.101");
+        PingOptions options = new PingOptions();
         static PingReply reply;
+
+        ContextMenuStrip menu;
 
         public IconHandler()
         {
@@ -32,7 +35,8 @@ namespace TargetCheck
             icon.Text = "Target Ready";
             icon.Visible = true;
 
-            icon.ContextMenuStrip = new CxtMenu().Create();
+            menu = new CxtMenu().Create();
+            icon.ContextMenuStrip = menu;
 
             ctDelegate = new CheckTargetDelegate(this.CheckTarget);
             ctDelegate.BeginInvoke(0, false, null, null);
@@ -49,17 +53,10 @@ namespace TargetCheck
 
         void icon_MouseClick(object sender, MouseEventArgs mouseEvent)
         {
-            // TODO: On right-click, show settings menu
-            // Change target IP address
-            // Change loop period
-            if (mouseEvent.Button == MouseButtons.Right)
-            {
-                // stuff
-            }
+            // Right-click handled in CxtMenu
+            // Left-click closes program
             switch (mouseEvent.Button)
             {
-                case MouseButtons.Right:
-                    break;
                 case MouseButtons.Left:
                     Dispose();
                     break;
@@ -72,7 +69,7 @@ namespace TargetCheck
             {
                 // ping IP
                 reply = ping.Send(address);
-                if (reply.RoundtripTime < 200)
+                if (reply.Status == IPStatus.Success)
                 {
                     icon.Icon = TargetCheck.Properties.Resources.iconTrue;
                 }
@@ -82,7 +79,7 @@ namespace TargetCheck
                 }
 
                 // wait 
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(500);
             }
         }
     }
